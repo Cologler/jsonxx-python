@@ -5,6 +5,7 @@
 #
 # ----------
 
+import string
 import re
 from json import JSONDecoder, JSONDecodeError
 
@@ -48,8 +49,10 @@ def _parse_regex(s: str, end: int, strict=True, *, memo: dict=None):
             flags |= re.X
         elif char == 's':
             flags |= re.S
-        else:
+        elif char not in string.ascii_letters:
             break
+        else:
+            raise JSONDecodeError("Invalid regex flag at", s, index)
         index += 1
 
     key = (re.Pattern, pattern, flags)

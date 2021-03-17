@@ -7,19 +7,16 @@
 
 import re
 
-from jsonxx import JSONxxDecoder, loads
+from jsonxx import JSONDecodeError, loads
 from jsonxx.plugins import *
+
+from pytest import raises
 
 BASE_FLAGS = re.compile('').flags
 PLUGINS = [
     RegexPlugin(),
     *STANDARD_PLUGINS
 ]
-
-def decoder():
-    return JSONxxDecoder(
-        plugins=PLUGINS
-    )
 
 def test_basic():
     # basic
@@ -41,6 +38,14 @@ def test_basic():
     assert isinstance(exp, re.Pattern)
     assert exp.pattern == '^axX$'
     assert exp.flags == BASE_FLAGS | re.I
+
+def test_bad_flags():
+    with raises(JSONDecodeError) as ctx:
+        loads('/^axX$/g', plugins=PLUGINS)
+    assert str(ctx.value) == 'Invalid regex flag at: line 1 column 8 (char 7)'
+    with raises(JSONDecodeError) as ctx:
+        loads('/^axX$/ig', plugins=PLUGINS)
+    assert str(ctx.value) == 'Invalid regex flag at: line 1 column 9 (char 8)'
 
 def test_doc_example():
     obj = loads('/^axX$/i', plugins=(RegexPlugin(), ) + STANDARD_PLUGINS)

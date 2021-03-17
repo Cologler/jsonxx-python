@@ -5,14 +5,16 @@
 #
 # ----------
 
-import json as _std_json
+import json as std_json
+from json import JSONDecodeError
 import functools
 
 from .decoder import JSONxxDecoder
 
-load = functools.partial(_std_json.load, cls=JSONxxDecoder)
-loads = functools.partial(_std_json.loads, cls=JSONxxDecoder)
+load = functools.partial(std_json.load, cls=JSONxxDecoder)
+loads = functools.partial(std_json.loads, cls=JSONxxDecoder)
 
 __all__ = (
-    'JSONxxDecoder'
+    'JSONxxDecoder', 'JSONDecodeError',
+    'load', 'loads',
 )
