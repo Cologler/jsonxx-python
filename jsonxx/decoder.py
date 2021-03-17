@@ -23,7 +23,7 @@ def _make_scanner(context):
         for match, parse in plugin_scanners:
             state = match(string, idx, nextchar)
             if state:
-                return parse(state, string, idx, scan_once)
+                return parse(state, string, idx, _scan_once)
 
         raise StopIteration(idx)
 
