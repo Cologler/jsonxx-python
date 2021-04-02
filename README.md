@@ -4,12 +4,12 @@ An extendable JSON parser for Python.
 
 ## Usage
 
-use like std python:
+Just like the `json` module in python:
 
 ``` py
 from jsonxx import loads
 
-loads()
+loads(...)
 ```
 
 or extend with regex:
